@@ -9,10 +9,10 @@ connectDB();
 export async function POST(request : NextRequest){
     try {
         const reqBody = await request.json();
-        const { email, password, username } = reqBody;     
+        const { emailorUsername, password } = reqBody;     
 
         // check if email or username is provided
-        if(!email && !username){
+        if(!emailorUsername){
             return NextResponse.json(
                 {
                     error : "Email or username is required",
@@ -32,7 +32,7 @@ export async function POST(request : NextRequest){
         }
 
         // find user by email or username
-        const user = await User.findOne({$or: [{email}, {username}]});
+        const user = await User.findOne({$or: [{email: emailorUsername}, {username: emailorUsername}]});
 
         // check if user exists
         if(!user){
